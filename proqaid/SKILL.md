@@ -31,6 +31,15 @@ other signal.
 After selecting the level, read
 `references/operating-levels.md` for its role model, memory layout, and flow.
 
+## Exclusive Governance Layer
+
+PROQAID is the only planning, orchestration, agent-dispatch, review, and iteration-memory system while it governs an iteration.
+
+- Do not activate Superpowers or another governance workflow for the same iteration, including parallel planning, executing-plan, subagent-development, branch-finishing, or code-review workflows that create a second task graph, agent hierarchy, review cadence, or authority.
+- Do not create or update `.superpowers/` artifacts. Treat inherited files as read-only historical evidence; merge any needed fact into a PROQAID authority document, then archive or remove them at the exit gate.
+- TDD, worktree isolation, systematic debugging, and verification before completion remain allowed inside PROQAID-assigned worker and gate ownership, but must not create a second plan, status system, dispatcher, or Review owner.
+- If another governance workflow owns an active iteration, switch only after explicit human selection and a safe handoff; never run both during transition.
+
 ## Role Set
 
 PROQAID means Product, Review, Orchestrator, Quality, Architecture, Interface,
@@ -335,9 +344,9 @@ hardcoded demo data, TODO placeholders, throwaway scripts, or unused mocks in
 production code. If a temporary artifact is unavoidable during work, it must be
 removed or explicitly routed to the checklist before exit.
 
-Use the local equivalents of test-driven development, worktree isolation,
-subagent-driven development, and verification-before-completion when those
-skills/tools are available.
+Within PROQAID-owned worker dispatch, apply TDD, worktree isolation, systematic
+debugging, and verification before completion as techniques. Do not activate a
+second planning, subagent-development, or review workflow around the worker.
 
 ## Test Cadence and Ownership
 

@@ -12,6 +12,7 @@ PROQAID 由 Product、Review、Orchestrator、Quality、Architecture、Interface
 
 - Architecture、Interface 和 Quality 在开发前冻结模块边界、公开契约和测试所有权，Review 随后执行一次 Design Freeze 审计。
 - Orchestrator 负责调度、依赖路由、串行集成和异常处理；生产代码只由具备独立写入范围的临时 worker 修改。
+- PROQAID 是迭代内唯一治理层，不与 Superpowers 或其他计划、子代理开发、Review 编排流程同时运行；TDD、worktree、系统化调试和完成前验证只作为底层技术使用。
 - 安全的独立任务尽量占满可用并发槽，共享文件和依赖链保持串行。
 - Worker 负责模块 TDD；Review 只 fresh 验证高风险变化；Quality 每个集成波次验证一次跨模块业务闭环；最终阶段运行一份完整证据集。
 - 治理文档必须有明确下游读者和决策用途。默认不维护 agent status 文件，也不保留重复的 inbox/outbox 副本。
