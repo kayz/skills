@@ -1,94 +1,98 @@
 # PROQAID Operating Levels
 
-Read this reference after recording the human-selected operating level. Use
-Lite only when the human explicitly requests it; otherwise use Full.
+Read this reference after recording the human-selected level. Use Lite only
+when explicitly requested; otherwise use Full. Both levels apply the Iteration
+Size Gate, Tool-First execution, one Human Operator preparation packet,
+candidate-bound evidence, and independent Review.
 
-## Lite Role Model
+## Full
 
-- Orchestrator owns confirmation, checklist flow, shared writes, and concise
-  Product, Architecture, and Interface decisions unless an area is materially
-  affected.
-- Quality is always independent and proves the business loop.
-- Review is always independent and performs the exit audit.
-- Invoke Delivery independently for production deployment, migration, runtime,
-  or rollback work.
-- Invoke Product, Architecture, or Interface only for a material decision that
-  Orchestrator and Review should not combine.
-- Use one implementation worker by default; use at most two with independent
-  write scopes.
+Full means all seven authority areas are covered, not that all seven standing
+agents are invoked.
 
-An uninvoked role is coverage, not an agent. Do not create its directory,
-inbox, outbox, or review. Record it as `covered by Orchestrator` or `not
-affected`. Never merge Quality or Review into Orchestrator.
+- Orchestrator and Review are always independent.
+- Invoke Quality for production behavior or acceptance changes.
+- Invoke Product for user-visible scope, concepts, or claims.
+- Invoke Architecture for public/cross-module domain, data, dependency,
+  persistence, or contract changes.
+- Invoke Interface for UI, API, CLI, accessibility, or interaction changes.
+- Invoke Delivery for build, migration, deployment, CI/CD, runtime, security,
+  observability, rollback, or release changes.
+- Record an uninvoked role as `not affected`; do not create role memory solely
+  to record inactivity.
+- Use 2-4 temporary implementation workers when scopes are independent.
 
-## Lite Flow
+Full specialists own their affected decisions. Orchestrator owns shared writes,
+scope, routing, integration, Human Operator handoff, and cleanup. Review audits
+the impact matrix, Design Freeze, risk waves, evidence, and exit.
 
-1. Confirm the project and record the human's explicit Lite instruction.
-2. Create one checklist covering implementation, acceptance, and deployment or
-   delivery.
-3. Record Product, Architecture, and Interface decisions in Orchestrator memory;
-   invoke a specialist only when materially affected.
-4. Freeze affected module/API boundaries and test ownership, then have Review
-   audit the design freeze when Architecture or Interface is materially changed.
-5. Dispatch one worker by default, or two with disjoint ownership. Use both
-   slots when independent work is ready.
-6. Have workers run module-local TDD; have Quality verify the integrated
-   business loop once, not repeat every worker suite.
-7. Have Delivery check real deployment, migration, runtime, and rollback work
-   without duplicating unchanged business tests.
-8. Update shared human documents from verified facts and have Review audit the
-   wave/final candidate, evidence, and cleanup.
-9. Resolve findings within Lite. If the selected agent set becomes insufficient,
-   report the blocker and ask the human whether to remain Lite or switch Full;
-   never switch automatically.
-10. Exit only after the applicable gate passes.
+## Lite
 
-## Full Role Model and Flow
+Lite reduces agent separation, not acceptance integrity.
 
-Invoke all seven standing roles. Use the Design Freeze, reader-driven memory,
-parallel worker waves, test ownership, and wave/final audit flow in `SKILL.md`.
+- Orchestrator and Review remain independent.
+- Quality remains independent when production behavior changes and proves the
+  integrated business loop.
+- Orchestrator covers concise Product, Architecture, and Interface decisions by
+  default; invoke a specialist only for a material decision that should not be
+  combined.
+- Invoke Delivery independently for material deployment, migration, runtime,
+  rollback, security, or release work.
+- Use one worker by default and at most two with disjoint ownership.
+- If Lite becomes insufficient, report the concrete blocker and ask the human;
+  never upgrade automatically.
 
-## Memory Layouts
+Lite uses the same Human Operator protocol: affected roles provide requirements,
+Orchestrator sends one batched preparation packet at entry, the human or another
+external operator prepares privileged/host resources, deterministic preflight
+verifies readiness, and execution then continues autonomously. Missing final
+environment evidence blocks exit unless the human accepts a deviation.
 
-Lite creates only current human documents, Orchestrator, Quality, Review, and
-independently invoked specialists:
+## Role Impact Matrix
+
+Use one compact table in the iteration brief:
+
+| Authority | affected / covered / not affected | owner | required decision/evidence |
+|---|---|---|---|
+| Product | | | |
+| Architecture | | | |
+| Interface | | | |
+| Quality | | | |
+| Delivery | | | |
+| Review | affected | Review | admission/exit audit |
+
+Do not create empty role directories, inboxes, outboxes, or context documents.
+An invoked role writes only an authority-bearing decision or evidence index with
+a named downstream reader.
+
+## Memory
+
+Create only what the current iteration needs:
 
 ```text
 README.md
 iteration-N-checklist.md
-.codex/AGENTS.md
-.claude/CLAUDE.md
-.proqaid/
-  orchestrator/
-  quality/
-  review/
-  delivery/       # only when independently invoked
-  <specialist>/   # only when independently invoked
-src/
-docs/
-hidden/
-result/
-```
-
-Full creates the complete role memory:
-
-```text
 .proqaid/
   orchestrator/
     current-iteration.md
-    implementation-plan.md
-    decisions.md
-    deviations.md
-    cleanup.md
-  product/
-  architecture/
-  interface/
-  quality/
-  delivery/
-  review/
+    decisions.md       # only unresolved or durable decisions
+  <invoked-role>/      # only authority/evidence a later reader needs
+docs/<affected-role>/  # current human-facing output only
 ```
 
-Each invoked role keeps only authority-bearing current artifacts and evidence
-with a named downstream reader. Inbox/outbox files are optional transport, not
-mandatory memory. Current human-facing artifacts remain under `docs/<role>/`;
-agent memory remains under `.proqaid/<role>/`.
+Tool-specific hard constraints remain in their native files when required.
+Inbox/outbox files are optional transport and should normally be removed after
+their decision is consumed. Raw CI/test/log artifacts remain in the external
+execution system; PROQAID stores a compact candidate-bound index.
+
+## Flow Differences
+
+| Concern | Full | Lite |
+|---|---|---|
+| Specialist decisions | invoke each affected authority | Orchestrator covers P/A/I unless material |
+| Quality | independent when behavior/acceptance changes | independent when behavior changes |
+| Review | independent, risk-scaled | independent, concise |
+| Workers | 2-4 | 1, at most 2 |
+| Human preparation | one batched packet + preflight | same |
+| Deterministic execution | existing CI/CD/tools first | same |
+| Exit evidence | complete applicable gate | complete applicable gate |

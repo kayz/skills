@@ -1,4 +1,4 @@
 interface:
   display_name: "PROQAID"
-  short_description: "User-selected governed project delivery"
-  default_prompt: "Use $proqaid with the user's explicit Lite selection, or Full by default, then run the iteration through implementation, independent quality, audit, and cleanup."
+  short_description: "Governed, tool-first project delivery"
+  default_prompt: "Use $proqaid with the user's explicit Lite selection, or Full by default. Bound iteration size, invoke only affected roles, batch Human Operator prerequisites, use existing deterministic tools, then deliver candidate-bound acceptance and cleanup."
