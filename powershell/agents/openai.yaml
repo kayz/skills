@@ -1,0 +1,4 @@
+interface:
+  display_name: "PowerShell"
+  short_description: "Write reliable native Windows PowerShell"
+  default_prompt: "Use $powershell to compose or review this Windows PowerShell command or .ps1 script, keep syntax native to PowerShell, and verify parsing and exit handling."

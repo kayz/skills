@@ -1,86 +1,114 @@
-# PROQAID External Execution Contracts
+# PROQAID Execution Contracts
 
-Read this reference only when an iteration needs host/privileged preparation,
-CI/CD, a test platform, a remote environment, or another external executor.
+Read this file only when creating or changing a worker, external executor,
+Human Operator, SIT, or release contract.
 
-## Human Operator Preparation Packet
+## Worker Contract
 
-Consolidate all requests into one entry-time packet:
-
-| Field | Required content |
-|---|---|
-| Purpose | decision or exit evidence enabled |
-| Timing | blocks development, a wave, or exit |
-| Target | OS, architecture, version, account, service, or permission |
-| Action | exact operation or copyable command when appropriate |
-| Safety | privilege, secret, cost, destructive, and rollback notes |
-| Success | deterministic readiness condition |
-| Evidence | minimum output, identifier, version, or artifact to return |
-| Alternative | CI/CD, IT, remote executor, or approved defer |
-
-The user may perform the packet or delegate it. Do not ask the user to expose
-secret values in chat; request only confirmation, identifiers, or safe evidence.
-
-## Environment Contract
-
-Delivery defines requirements, not manual host configuration:
-
-- OS/architecture and tool/runtime versions;
-- locks, image digests, licenses, resource and security limits;
-- network, account, secret-injection, migration, rollback, and cleanup rules;
-- canonical build/start/health/acceptance commands;
-- expected outputs and artifact retention; and
-- the final preflight and exit checks.
-
-Project-owned CI, container, and validation configuration may be implemented in
-the repository. Host installation, long-lived credentials, organization systems,
-and privileged configuration go to the Human Operator or external platform.
-
-## Test Execution Contract
-
-Quality defines:
-
-- behavior and acceptance IDs;
-- inputs, fixtures, environment, and failure injection;
-- required tool capabilities, isolation, concurrency, and timeout;
-- exact entry command or machine-readable job;
-- pass/fail rules; and
-- evidence and retention requirements.
-
-Workers run fast module TDD. Existing CI/CD or test platforms run deterministic
-full, real-environment, browser, multi-platform, migration, scan, and
-reproducibility jobs. Quality judges whether the result proves the business
-contract; it does not reproduce the tool manually.
-
-## Evidence Summary
-
-Every external result must return:
+Use a compact core shared by Development Worker, Test Author, Test Executor, and
+other approved executor profiles:
 
 ```text
-candidate commit/tag
-environment identity and versions
-tool and command/job identity
-test/check inventory and counts
-start/end time and exit code
-artifact, image, report, and log references with digests where applicable
-cleanup result
-verdict and failed acceptance IDs
+task/checklist/case/defect ID
+worker profile, executor, actual model, permission, OS and shell
+exact base and isolated workspace
+allowed and excluded paths
+frozen contracts, expected/Oracle references, forbidden changes
+required self-test or execution commands
+risk-based regression commands
+timeout and recovery budget
+structured result and evidence fields
+Mentor, escalation, integration and cleanup rules
 ```
 
-Keep raw logs and artifacts in the execution system. Load only the summary into
-normal agent context; retrieve exact failure slices when diagnosis is required.
+Profile-specific requirements:
 
-## Autonomous Continuation
+- **Development Worker**: implement the bounded change and run its self-test.
+- **Test Author**: implement fixtures/tests/mappings against a frozen Quality contract
+  and self-test the harness.
+- **Test Executor**: modify no source; execute the frozen inventory and return actual
+  counts and evidence.
+- **Environment/SIT Executor**: operate only named project resources and return health,
+  isolation, identity, and cleanup evidence.
+- **Release Executor**: Delivery-only target access, artifact identity, deployment,
+  health, rollback readiness, and credential isolation.
 
-After preparation:
+A defect reproduction before modification is optional. Do not require RED/GREEN
+ceremony. Required commands must actually execute; runner records override prose.
 
-1. Run preflight.
-2. If it passes, continue without further confirmation.
-3. Trigger deterministic jobs asynchronously and release agent slots.
-4. Consume the evidence summary when the job completes.
-5. Diagnose failures with targeted artifacts; retry safe transient failures.
-6. Pause only for new authority, unsafe/destructive action, material scope or
-   environment change, no safe tool alternative, or human risk acceptance.
+## Result
 
-If preflight or final evidence is missing, keep the applicable gate pending.
-Never downgrade the target environment or relabel approximate evidence as final.
+Return a compact machine-readable result containing at least:
+
+```json
+{
+  "status": "ready|blocked|failed",
+  "base_sha": "...",
+  "candidate_sha": "...",
+  "changed_files": [],
+  "commands": [],
+  "tests": {"expected": 0, "passed": 0, "failed": 0},
+  "evidence": [],
+  "recovery_cycles": 0,
+  "blockers": [],
+  "cleanup": "...",
+  "summary": "..."
+}
+```
+
+Record actual model, OS/shell, permission, command/argv, cwd, start/end or duration,
+exit code, inventory/counts, evidence digest/location, and escalation reason where
+applicable. Worker prose cannot change deterministic facts or supply a Mentor verdict.
+
+## Recovery
+
+Keep the candidate and relevant failure evidence while the same worker performs
+checklist-approved bounded correction. Stop and return to the Orchestrator when:
+
+- a frozen boundary, expected value, Oracle, tolerance, or acceptance must change;
+- the requested write scope expands;
+- root cause is unknown across modules or enters a high-risk overlay;
+- assertions or evidence would be weakened;
+- the recovery budget is exhausted.
+
+Environment or runner failures stay with the same execution tier. Repair the
+environment or executor rather than changing models without a capability reason.
+
+## Phase-Specific Environment Contract
+
+### Development
+
+- Use the project's declared primary OS and shell for the main model and workers.
+- Check only tools needed by the current task.
+- Prefer minimum/compatible versions; pin exactly only for a recorded output, ABI,
+  security, or reproducibility reason.
+- Keep worker scratch, caches, and ordinary dependency repair outside Delivery's
+  per-task workflow.
+
+### SIT
+
+Create a SIT contract only when acceptance requires integrated persistence,
+services, topology, deployment packaging, or target-like behavior. Record service
+identity, data manifest, isolation namespace, health checks, acceptance commands,
+and cleanup. An iteration that does not need SIT has no SIT admission work.
+
+### Release/UAT
+
+Delivery records artifact identity, target, configuration, migration, rollback,
+health, credential handling, and release evidence. Ordinary workers do not receive
+release credentials.
+
+## Human Operator
+
+Ask the human only for privileged host actions, accounts, secrets, organization
+systems, or another action outside agent authority that blocks the current phase.
+Batch known actions, provide a copyable command when safe, define success evidence,
+and never request secret values. Do not front-load future SIT or release setup into
+development admission.
+
+## Evidence Retention
+
+Keep raw logs, reports, screenshots, traces, and retry history in the execution
+system. Put only candidate-bound summaries and durable artifact references in the
+iteration checklist. Reuse unchanged evidence until its command, dependency,
+fixture, toolchain, runtime, or candidate binding changes.
