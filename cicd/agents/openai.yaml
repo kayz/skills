@@ -1,0 +1,4 @@
+interface:
+  display_name: "CICD"
+  short_description: "Human-authorized version CI/CD delivery"
+  default_prompt: "Use $cicd to prepare or operate a Human-authorized version candidate and its immutable CI/CD delivery."

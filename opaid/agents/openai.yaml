@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPAID"
+  short_description: "Local self-tested delivery with Human brief"
+  default_prompt: "Use $opaid to deliver an exact locally self-tested candidate and its concise Human handoff without entering CI/CD."
