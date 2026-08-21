@@ -1,4 +1,4 @@
 interface:
   display_name: "OPAID"
-  short_description: "Local self-tested delivery with Human brief"
-  default_prompt: "Use $opaid to deliver an exact locally self-tested candidate and its concise Human handoff without entering CI/CD."
+  short_description: "Direct-first local delivery with verified handoff"
+  default_prompt: "Use $opaid to deliver a locally self-tested candidate directly, adding bounded sibling Workers only when independent work will reduce total coordination cost."
