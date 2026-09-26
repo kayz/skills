@@ -1,0 +1,4 @@
+interface:
+  display_name: "CICD"
+  short_description: "Immutable delivery, readiness, and environment promotion"
+  default_prompt: "Use $cicd to deliver an authorized immutable candidate, establish technical readiness, and consume VERIFY evidence for promotion or rollback under the project contract."

@@ -1,0 +1,45 @@
+# {{bounded_outcome}}
+
+Adapt this into the existing specification/task/sole brief using the project's
+shared document protocol. Resolve applicable fields, omit irrelevant sections,
+and remove these instructions. Link authoritative detail instead of duplicating
+it. Scenario and evidence rows can repeat as needed; they are not fixed quotas.
+
+## Human delivery view
+
+- User result and scope: {{observable_result_and_non_goals}}
+- Real acceptance entry: {{normal_product_entry_and_access_preconditions}}
+- Expected experience: {{what_the_human_should_observe}}
+- Current conclusion: {{what_is_verified_for_which_candidate_and_environment}}
+- Remaining work or decision: {{bounded_next_action_and_material_limitations}}
+
+## Agreements
+
+- Identity and effective basis: {{feature_or_task_id_and_source_revisions}}
+- Requirement status: {{accepted_requirements_working_defaults_and_proposals}}
+- Completion conditions: {{finite_conditions_for_this_scope}}
+- Design and public contracts: {{owning_documents_modules_state_and_dependencies}}
+- Shared document convention: {{effective_project_protocol_location}}
+
+## Acceptance scenarios
+
+### {{stable_scenario_id}} — {{observable_behavior}}
+
+- Requirement: {{owning_requirement_reference}}
+- Preconditions and data: {{reproducible_inputs_and_setup}}
+- Human steps: {{normal_entry_actions_and_stopping_point}}
+- Expected result and basis: {{independent_expectation_and_relevant_failures}}
+- Automatic checks: {{existing_test_links_commands_or_honestly_planned_entry}}
+- Environment and effects: {{applicability_allowed_writes_reset_and_cleanup}}
+
+## Delivery and verification evidence
+
+Link existing local/build/deployment/test reports. Keep historical runs with
+their original identities; do not overwrite them with current conclusions.
+
+| Scenario / delivery operation | Agreement and test revision | Candidate / artifact | Environment / relevant configuration | Actual result and scope | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| {{scenario_or_operation}} | {{basis}} | {{exact_identity}} | {{environment_no_secrets}} | {{not_run_blocked_failed_or_scoped_pass}} | {{report_or_record}} |
+
+- Human acceptance: {{explicit_record_and_scope_or_pending_never_inferred}}
+- Material changes and remaining work: {{basis_for_changed_agreements_affected_evidence_and_next_action}}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPAID"
+  short_description: "Bounded implementation with unit and integration evidence"
+  default_prompt: "Use $opaid to implement a bounded result under shared project contracts, run unit and applicable local integration and VERIFY scenarios, and hand off exact candidate evidence."

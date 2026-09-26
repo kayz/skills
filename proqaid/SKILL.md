@@ -1,9 +1,17 @@
 ---
 name: proqaid
-description: Use when a software project has multiple independent role or implementation tracks, needs iteration bootstrap, recovery from governance drift, a material scope or acceptance change, test-environment validation, or formal closure.
+description: Coordinate iterations in projects that already use PROQAID or explicitly request adopting it. Use within that selected workflow for bootstrap, recovery, material scope changes, parallel role work, test-environment validation, or closure.
 ---
 
 # PROQAID
+
+## Applicability
+
+Use this workflow only when the project already selects PROQAID or the user
+explicitly requests its adoption. Other projects continue their selected workflow;
+parallel development alone does not select PROQAID. Do not layer its checklist,
+roles or approval states over PACT/VERIFY/OPAID/CICD. An authorized migration
+selects the replacement responsibilities and preserves useful decisions/evidence.
 
 ## Purpose
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "VERIFY"
+  short_description: "Design acceptance and verify delivered business behavior"
+  default_prompt: "Use $verify to turn this accepted spec into executable acceptance tests and human steps, or verify the delivered candidate in its authorized environment."

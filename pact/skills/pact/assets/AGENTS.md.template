@@ -1,0 +1,48 @@
+# Project working agreement
+
+Adapt this template into the existing entry. Replace all `{{fields}}` and remove
+this paragraph before activation; omit sections that do not apply.
+
+## Effective sources
+
+- Product scope and non-goals: {{accepted_spec_path_and_revision}}
+- Architecture and module contracts: {{architecture_index}}
+- Acceptance and actual check entry points: {{acceptance_and_checks}}
+- Current bounded task: {{existing_issue_or_single_brief}}
+- Human document console and shared convention: {{project_entry_and_document_protocol}}
+- Material decision owner: {{project_owner_or_existing_review_rule}}
+
+Read applicable sources before changing their behavior. Draft/historical documents
+are not current authority. Report missing required sources and continue independent
+work; do not substitute an unverified copy.
+
+## Working boundaries
+
+- {{few_project_specific_invariants_with_links_to_their_owners}}
+- Reuse the owning module and public use case. Preserve state ownership and
+  permitted dependencies; avoid duplicate implementations.
+- Keep this task's user outcome and non-goals fixed unless explicitly changed.
+  Resolve material conflicts with their owner; routine choices remain with the
+  implementing agent.
+- Use PACT for the document console and agreements, VERIFY for acceptance design
+  and environment business verification, OPAID for implementation/unit tests/local
+  checks, and CICD for authorized delivery and recovery when selected.
+  Equivalent existing workflows: {{selected_workflow_sources_and_versions}}
+
+## Verification and handoff
+
+- Run {{applicable_real_check_commands}} for changed behavior and the final
+  integrated candidate. Report actual results and omissions.
+- Human walkthrough: {{normal_entry_inputs_expected_result_and_failures}}.
+- Keep implementation, integration, runtime verification and human acceptance
+  distinct. Do not invent approval or treat mocks as real-backend evidence.
+- Parallel work shares effective sources and explicit write/interface ownership.
+  Inspect and verify the integrated candidate before handoff.
+- Use existing task/evidence records; do not create parallel status ledgers.
+- Continue from effective agreements, stable scenarios, current candidate and
+  environment evidence, then remaining work. Preserve historical results; an old
+  pass does not automatically apply to a new candidate or environment.
+- Separate intended behavior from observed facts. Changes to expected results
+  need an authorized requirement change or justified test correction.
+- Use the project's selected source/review/test/CI tools and this host's supported
+  skill layout. Host-specific metadata does not change shared document meanings.
