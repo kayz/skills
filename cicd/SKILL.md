@@ -1,80 +1,136 @@
 ---
 name: cicd
-description: Use when a Human has explicitly chosen a version number or requested version delivery, release-candidate CI, immutable image publication, test-environment deployment, rollback, or diagnosis of that version pipeline. Enforces a version-tag gate after OPAID and does not run for ordinary branch pushes, Pull Requests, or main merges.
+description: Build and deliver a Human-authorized immutable candidate, establish environment technical readiness, and use VERIFY conclusions for promotion or rollback. Use for version delivery, artifact publication, environment operations, and read-only release diagnosis; ordinary development does not authorize delivery.
 ---
 
 # CICD
 
 ## Purpose
 
-Turn one Human-authorized version candidate into reproducible remote evidence and
-immutable deliverables. Keep ordinary iteration development in OPAID; CICD starts
-only when the Human explicitly chooses the version or asks to operate an existing
-version pipeline.
+Build and deliver an authorized immutable candidate, prove the environment is
+technically ready, and carry out authorized promotion or rollback using current
+business verification evidence. Keep source, artifacts, operations, and results
+bound to the same release identity.
 
-## Entry Contract
+PACT maintains shared document contracts. VERIFY designs acceptance assets early
+and owns business verification after each environment delivery. OPAID owns
+implementation, unit tests, and applicable local integration. CICD owns build,
+artifact delivery, environment readiness, promotion, and rollback; it consumes
+VERIFY conclusions rather than declaring business acceptance from health checks.
+Route source fixes to OPAID and semantic contract changes to PACT's responsibility.
+These are workflow responsibilities, not provider APIs or mandatory new sessions.
 
-Before mutating GitHub or a release system, require all of the following:
+## Project Release Contract
 
-- an explicit Human version decision or an explicit request to inspect or retry an
-  already existing version;
-- the repository's accepted version format;
-- an exact candidate commit already on the protected default branch;
-- the local OPAID handoff and residual risks needed to interpret remote results;
-- the intended environment and the authorized extent of side effects.
+Follow AGENTS.md or the project's existing entry to the effective shared
+specification, release contract, scenario assets, and evidence locations. Resolve
+their applicable versions and authority before choosing commands; do not assume a
+sibling PACT directory, skill installation, or a provider-specific document store.
+Identify source eligibility, release identity format, artifact set and platforms,
+applicable scans/signing/provenance/SBOM, target environments, technical readiness,
+VERIFY gates, automatic side effects, rollback, and authorization boundaries.
 
-Do not infer version authority from an ordinary push, Pull Request, merge, local
-test pass, Agent plan, or iteration brief. If the version or authority is absent,
-stop before creating, moving, or deleting a tag and ask the Human.
+Use the project's existing VCS or source snapshot mechanism, build runner, and
+delivery profile: container services, desktop installers, packages, or another
+artifact type. Builds may run locally or on the project's selected service.
+Do not impose Git, GitHub, a remote CI provider, Linux, Docker, or a registry.
+Do not modify the project's chosen platform configuration merely to fit this
+skill. If the project explicitly adopts the strict Git-tag/container profile,
+read [references/container-release.md](references/container-release.md).
+If a material contract or authority decision is missing, prepare the concrete
+candidate and release plan before requesting only that decision.
 
-## Version Gate
+## Authority and Immutable Identity
 
-1. Resolve the current default-branch tip and requested version before creating a
-   tag.
-2. Create the version tag only when the Human has authorized that exact version.
-   Treat creation as authorization for the repository's documented automatic
-   version CI, image build, scan, and test-environment delivery.
-3. Require the tag to identify the exact default-branch tip. Reject worktree diffs,
-   feature branches, arbitrary reachable commits, and moving branch names.
-4. Treat every version tag as immutable. Never force-move or reuse a failed tag.
-   Repair through a new OPAID iteration and a forward-only version.
-5. Manual dispatch or retry must resolve to the same existing version tag and exact
-   commit; it must not accept an unversioned commit shortcut.
+Read-only inspection of code, workflow configuration, logs, and existing releases
+does not require a new version decision. Inspection does not authorize retry,
+publication, deployment, or rollback.
 
-## Automated Delivery Contract
+Before a release or environment mutation, resolve the requested operation, exact
+version or release identity, environment, and authorized side effects. Require
+explicit Human authorization for version/delivery operations under the project
+contract. Do not infer it from a source update, merge, local test pass, Agent plan,
+or iteration brief. Preserve existing quality gates. Reuse an already authorized
+full chain without asking again at each step.
 
-Once the Human creates the tag, allow the repository's automatic line to perform:
+For a **new release**:
 
-1. full Linux CI and supply-chain checks on the tagged commit;
-2. build and push images identified first by exact Commit SHA;
-3. scan every required image and collect provenance and SBOM evidence;
-4. only after the complete image set passes, promote those same manifests to the
-   immutable version tag;
-5. deploy the test environment using SHA identities;
-6. run health checks, smoke tests, deployment recording, and rollback on failure.
+1. Resolve the authorized version/delivery and the project's identity format. If
+   a required version decision is missing, obtain that decision before creating
+   the identity; do not invent a version or an unrequested delivery.
+2. Bind the eligible source to an immutable revision or reproducible snapshot
+   digest and the exact OPAID evidence. Follow the project's source policy; there
+   is no universal current-main or Git-tag requirement. A moving name alone is
+   insufficient. Changed or integrated source must be locally reverified before
+   release.
+3. Bind the release identity, effective build inputs, complete artifact identities,
+   and applicable specification/scenario versions in existing release records.
+   When Git tags are the selected strategy, require the authorized exact tag and
+   commit, keep the tag immutable, and honor that project's branch eligibility.
+4. Check automatic side effects before creating the release identity. Never move
+   or reuse an immutable identity to conceal a changed or failed candidate.
 
-Do not publish mutable `latest` or `test-latest` identities. Do not promote a
-partially successful build matrix, and do not describe local OPAID evidence as
-remote Linux, registry, supply-chain, or target-environment proof.
+For **existing-release inspection, retry, or rollback**, bind to the recorded
+release identity, immutable source, and artifact identity. Historical releases
+need not equal today's source head. A retry may address a transient failure only
+with the same source, effective build inputs, rules, and artifact identity where
+already produced; never overwrite an existing artifact or retag a changed build.
+Deploy or roll back using the recorded artifact, rather than rebuilding it.
+Changed source or effective build inputs require a newly verified candidate and
+a new authorized release identity; preserve prior versions. A changed spec or
+scenario invalidates the corresponding old VERIFY conclusion even when the
+artifact is unchanged. Rollback requires compatibility checks and authority.
+
+## Delivery, VERIFY, and Promotion
+
+Execute the authorized project workflow:
+
+1. Run the declared build and technical checks on the exact source, platforms,
+   inputs, and runner. Record actual outputs and failures.
+2. Produce the complete required artifact set with immutable identities and the
+   applicable integrity, supply-chain, and signing evidence. Promote or publish
+   only when the required set passes; do not promote a partially successful matrix.
+3. Install or deploy those same artifacts in the authorized target environment.
+4. Check technical readiness: required components, configuration, dependencies,
+   migrations, connectivity, and health under the project contract. Record the
+   deployed identities and environment. Ready means VERIFY can run; it does not
+   mean business behavior passed.
+5. After each environment delivery, hand VERIFY the applicable stable scenario
+   IDs and spec revision, exact candidate/artifacts, environment, fixtures, and
+   real operation/observation entrypoints. Consume its recorded conclusions for
+   that combination. OPAID or CI may execute scenario tests; VERIFY owns the
+   acceptance basis and environment conclusion. A prior environment or candidate
+   pass does not qualify the current one. Missing or blocked required verification
+   prevents a pass claim and promotion that depends on it.
+6. Promote the same artifacts only when the contract's technical and VERIFY gates
+   pass and the next environment is authorized. Delivering to the next environment
+   starts its own readiness and VERIFY checks. On technical or business failure,
+   use the authorized recovery/rollback policy and preserve the failed evidence.
+
+Never use mutable `latest`, `test-latest`, or another channel alias as the release
+identity or rollback evidence. A project that explicitly uses package channels
+may update an authorized alias to an already verified immutable version; retain
+the version and digest as evidence and honor stricter profile rules. Use the
+project's existing entrypoints when handing off to VERIFY; do not introduce a new
+UI as part of delivery. If VERIFY is unavailable, use its documented project
+equivalent when authorized or report the missing gate; never fabricate a pass.
 
 Production release remains a separate Human-authorized action even when a version
-has passed the test environment. Respect repository-specific Environment approvals,
-secrets, operational boundaries, and rollback contracts.
+has passed a test environment. That production authorization may already be
+included explicitly in the Human's request; do not ask again. Respect the
+project's environment approvals, secrets, operational boundaries, and rollback
+contract.
 
 ## Result Handoff
 
-Report the version, exact commit, workflow identity, immutable artifacts, environment
-result, rollback outcome, blockers, and residual risks. Keep GitHub Actions, the
-registry, and target-environment deployment records as operational facts; do not
-create a parallel release ledger unless the repository explicitly requires one.
+Report release and source identities, build/operation identities, artifacts,
+technical readiness, referenced VERIFY conclusions, promotion/rollback outcome,
+blockers, and residual risks. Write CICD facts to the existing shared evidence
+locations, linking stable scenario IDs, spec revision, candidate, and environment.
+Preserve historical evidence; do not overwrite it as a current pass, change
+scenario meaning, or create a parallel release ledger.
 
-## Quick Corrections
-
-| Drift | Correction |
-|---|---|
-| PR or main merge starts full CI | Restrict the workflow to the Human version gate |
-| Agent invents a version | Stop and obtain the Human version decision |
-| Tag points to an older reachable commit | Reject it; require the current protected default-branch tip |
-| Failed tag is moved after a fix | Preserve it and create a forward-only version after OPAID |
-| Matrix publishes a shared mutable tag incrementally | Publish SHA images first and promote only after all scans pass |
-| Test deployment is treated as production approval | Require a separate Human production gate |
+Distinguish OPAID local tests, CICD technical readiness, VERIFY business results,
+and Human acceptance. One does not substitute for another; without an explicit
+Human acceptance record, describe it as pending rather than accepted. Finish when
+the authorized delivery scope is complete, or report the exact blocking boundary.

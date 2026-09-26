@@ -1,36 +1,82 @@
 # Skills
 
-可复用的 Codex skills。目前包含 PROQAID：面向多 Agent 软件开发的迭代治理体系。
+面向可信 AI 软件开发的可复用工作流。**PACT 是文档控制台**，与 **VERIFY、OPAID、
+CICD** 共用有效规格、验收场景和执行证据。成员可以使用不同 agent 和工具，项目
+约定的含义与本轮交付范围保持一致。
 
-## PROQAID
+| Skill | 何时使用 | 交付终点 | 源码入口 |
+| --- | --- | --- | --- |
+| PACT | 建立/诊断/修订项目约定，查看当前交付与验收入口 | 统一文档规范、有效设计、目标与证据的可读入口 | [PACT](pact/skills/pact/SKILL.md) |
+| VERIFY | 开发前设计验收；每次环境交付后验证业务结果 | 基于规格的测试资产、人类复验步骤、绑定环境的业务验证结论 | [VERIFY](verify/SKILL.md) |
+| OPAID | 既有约定内的功能、修复、重构与本地验证 | 精确的本地自测候选和可人工验收的交接 | [OPAID](opaid/SKILL.md) |
+| CICD | 明确授权的版本准备、制品发布、环境交付、晋级、重试或回滚 | 不可变制品、部署技术就绪与交付证据；消费 VERIFY 结论 | [CICD](cicd/SKILL.md) |
 
-![PROQAID 体系图](./proqaid-system-diagram.png)
+PACT 是 **Project Architecture & Collaboration Toolkit**（项目架构与协作工具包）。
+它在本仓库中是独立子项目；目前提供可使用的 skill、接入参考和模板。CLI、自动安装器
+及各平台插件尚未实现。子项目规格见 [pact/SPEC.md](pact/SPEC.md)。
 
-PROQAID 由 Product、Review、Orchestrator、Quality、Architecture、Interface、Delivery 七个职责组成。它关注的不是任务排期，而是长期 AI 开发中的目标、边界、证据、并发写入和文档卫生。
+## 四者怎样衔接
 
-核心规则：
+1. PACT 维护有效设计与共享文档规范，呈现本轮目标、验收入口、证据和剩余工作。
+2. VERIFY 将约定转为验收场景、独立预期、自动测试资产与人类操作步骤。
+3. OPAID 实现功能，负责单元测试和适用的本地集成，并提前运行可执行的验收测试。
+4. CICD 将明确候选交付到获授权的目标环境，VERIFY 验证实际业务路径。
+5. 测试环境结果满足晋级条件且已有生产授权时，CICD 交付同一制品到生产，VERIFY
+   执行生产适用场景。源码修复归 OPAID；约定含义变化归 PACT。
 
-- Full 覆盖七类责任，但只启动本轮受影响的角色；Orchestrator 在派发前执行迭代规模门，过大范围必须先向用户提出拆分。
-- Architecture、Interface 和 Quality 只冻结受影响的模块边界、公开契约和测试所有权，Review 随后执行一次 Design Freeze 审计。
-- Orchestrator 负责调度、依赖路由、串行集成和异常处理；生产代码只由具备独立写入范围的临时 worker 修改。
-- PROQAID 是迭代内唯一治理层，不与 Superpowers 或其他计划、子代理开发、Review 编排流程同时运行；TDD、worktree、系统化调试和完成前验证只作为底层技术使用。
-- 确定性检查优先交给项目现有工具、CI/CD 和测试平台；Quality/Delivery 定义合同并审核证据，不用 Agent 上下文模拟工具执行。
-- Full 与 Lite 都在入口阶段向 Human Operator 一次性提交宿主机、权限、账号、秘密和环境准备包；preflight 通过后自动执行，仅在无法安全绕过的阻断时再次请求用户。
-- 安全的独立任务尽量占满可用并发槽，共享文件和依赖链保持串行。
-- Worker 负责模块 TDD；Review 只 fresh 验证高风险变化；Quality 每个集成波次验证一次跨模块业务闭环；最终阶段运行一份完整证据集。
-- 治理文档必须有明确下游读者和决策用途。默认不维护 agent status 文件，也不保留重复的 inbox/outbox 副本。
-- 测试绿色不能替代业务闭环、真实运行证据和最终审计。
+按任务选择所需职责，已有约定清楚时无需重新初始化。同一 agent 或任务可以连续承担
+多个职责，已有授权继续有效。普通提交、代码评审、合并或本地测试通过，不自行扩大为
+发布授权。自动化测试可以由现有 CI 执行，无需因切换 skill 重复运行同一有效检查。
 
-详细规则见 [proqaid/SKILL.md](./proqaid/SKILL.md)；人工准备、环境、测试和外部证据合同按需读取 [execution-contracts.md](./proqaid/references/execution-contracts.md)。
+## 文档就是人类交付接口
 
-## 安装
+采用 [共享文档规范](pact/skills/pact/references/document-protocol.md)，复用现有规格、
+任务记录和测试报告。文档统一表达 **约定 → 验收场景 → 执行证据**，按场景标识关联
+自动测试与人类操作步骤；结果绑定规格修订、候选和环境。保留历史证据，明确未执行、
+阻塞、失败、通过和人类验收的区别。AGENTS 或宿主入口负责导航，不复制整份规格。
 
-将 `proqaid/` 复制到 Codex skills 目录：
+现有 [功能规格模板](pact/skills/pact/assets/outcome.md.template) 可按项目结构适配；
+先展示用户结果和验收方法，再链接设计与日志。PACT 的控制台就是这套可读文档及导航，
+当前没有控制台应用或自动编排服务。
+
+项目采用明确模块职责、单一状态所有者和可检查依赖方向；新项目可从模块化单体与
+显式适配器起步，部署拆分由实际需求决定。业务能力有真实操作或观测入口，内部函数
+不逐个建页面。自动测试、真实链路验证与人类验收保留各自的证据边界。
+
+## 项目级使用
+
+选择并复制完整的 skill 文件夹，保留内部引用。宿主支持 `.agents/skills/` 时可用：
 
 ```text
-~/.codex/skills/proqaid/
+目标项目/
+  AGENTS.md
+  .agents/skills/
+    pact/       ← 本仓 pact/skills/pact/
+    verify/     ← 本仓 verify/
+    opaid/      ← 本仓 opaid/
+    cicd/       ← 本仓 cicd/
 ```
 
-然后在新任务中使用 `$proqaid`，或直接要求 Codex 使用 PROQAID 运行软件项目迭代。
+选择需要的技能；日常开发不要求安装发布技能。不要将整个 `pact/` 子项目当作 skill
+复制，也不要让安装结果依赖维护者电脑上的绝对路径。项目记录选用的来源版本/提交；
+本地未提交快照应明确标记，不能作为已发布版本。升级通过可审阅差异保留项目修改。
 
-PROQAID 支持 Lite 和 Full。只有用户明确指定 Lite 时才使用 Lite，否则默认 Full；运行中不得自动切换级别。
+项目入口记录各 skill 共用的文档规范位置。使用其他宿主布局时适配入口，保持文档
+含义一致。接入 Codex、Cursor、DeepSeek Harness 等宿主时，验证实际加载的规则、
+技能及版本；文件存在不等于加载成功。`agents/openai.yaml` 仅为可选宿主元数据，
+通用工作流无需 OpenAI API、特定 agent 工具、GitHub、Git 或某家 CI 服务。
+
+项目自行选择源码身份、代码评审、测试框架、构建和发布方式。CICD 要求可追溯候选与
+不可变制品；Git tag、PR/MR、远程 CI、容器和注册表属于项目策略。已有严格发布策略
+仍然有效，容器专用规则仅在选择相应 profile 时适用。
+
+## 其他技能与现有项目
+
+- [powershell](powershell/SKILL.md)：Windows 命令与脚本的技术辅助技能。
+- [proqaid](proqaid/SKILL.md)：保留给已选择该流程的项目；不属于这次四技能默认组合。
+  不与 PACT/VERIFY/OPAID/CICD 叠加运行第二套迭代管理。迁移已有项目时，明确选定工作流并
+  处理冲突，保留仍有价值的决策和证据。
+
+各 skill 的 SKILL.md 定义其操作规则。项目有效规格和明确用户授权决定具体范围；
+共享技能不替代项目的语义决策，也不改变宿主权限。任务状态继续使用现有编排工具、
+issue 或唯一迭代 brief，避免重复账本。

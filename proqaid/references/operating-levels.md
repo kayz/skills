@@ -8,11 +8,13 @@ overlay. Routine `ACTIVE` work follows the recorded selection without reloading 
 Lite is a fast prototype or feasibility loop:
 
 - one sharply bounded outcome;
-- main model covers the affected responsibility perspectives;
-- one worker by default, at most two disjoint workers;
+- run affected responsibility profiles as direct sibling Role Agents when their
+  independent work can use otherwise idle orchestration slots;
+- use as many disjoint ready Workers as produce net speedup within tool capacity;
 - worker self-test and a concise result summary;
-- Quality or Review only when the prototype makes a material business, safety, or
-  external claim that needs independent judgment;
+- Quality only when Delivery hands off the prototype in a ready test environment;
+- Review only when the prototype produces a final document set, with those
+  documents as its complete input;
 - environment checks limited to capabilities required to run the prototype.
 
 Lite evidence demonstrates the prototype scope only. It is not automatically
@@ -23,9 +25,12 @@ valid as production, SIT, release, migration, recovery, or security evidence.
 Governed is the default formal iteration:
 
 - one authoritative checklist and formal exit state;
-- main-model role switches for affected Product, Architecture, Interface, and Delivery;
-- independent Quality at changed test-contract freeze and completed test-batch judgment;
-- independent Review at Design Freeze and exit;
+- parallel direct sibling Role Agents for affected Product, Architecture, Interface,
+  and Delivery work when their inputs and results are independent;
+- one scheduling layer controlled by the Root through the orchestration tool;
+- independent Quality testing only after Delivery hands off the exact candidate in
+  the ready test environment;
+- document-only Review after the final document set exists, skipped when none exists;
 - bounded workers with executed self-tests and candidate-bound evidence;
 - phase-specific development, SIT, and release prerequisites;
 - cleanup, accepted-risk, and final-candidate records.

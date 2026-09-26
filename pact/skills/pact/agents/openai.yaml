@@ -1,0 +1,4 @@
+interface:
+  display_name: "PACT"
+  short_description: "Shared document console for scope and acceptance"
+  default_prompt: "Use $pact to establish or inspect the shared document console, design agreements, acceptance scenarios, and current delivery evidence."

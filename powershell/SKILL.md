@@ -1,6 +1,6 @@
 ---
 name: powershell
-description: Use when composing, reviewing, or debugging Windows PowerShell commands or .ps1 scripts where paths, quoting, environment variables, native exit codes, or Bash/Linux shell habits could cause failures.
+description: Use when composing, reviewing, or debugging Windows PowerShell commands or .ps1 scripts where paths, quoting or regex, process arguments, environment variables, native exit codes, or Bash/Linux shell habits could cause failures.
 ---
 
 # PowerShell
@@ -24,12 +24,41 @@ $child = Join-Path $project "src"
 
 - Use `Get-ChildItem`, `Copy-Item`, `Move-Item`, `Remove-Item`, and `New-Item`
   instead of Unix aliases or commands in scripts.
-- Use `-LiteralPath` for filesystem mutations. Before a recursive delete or move,
-  resolve and verify that the target remains inside the intended root.
+- Use `-LiteralPath` for filesystem mutations when the cmdlet supports it.
+  `New-Item` uses `-Path`; verify the intended target and that command's path
+  handling instead of supplying an unsupported parameter. Before a recursive
+  delete or move, resolve and verify the target remains inside the intended root.
 - Do not emit `export`, `VAR=value command`, `source`, `chmod`, `rm -rf`, Bash
   heredocs, `/tmp`, `/home`, or WSL path assumptions.
 - Do not use Bash command substitution. PowerShell subexpressions use `$()` but
   have PowerShell semantics.
+
+## Quoting and Regular Expressions
+
+Backslash does not escape PowerShell quotes. Prefer single-quoted literals; write
+`''` for an embedded single quote. In a double-quoted string, escape `"` with the
+PowerShell backtick, not `\`. Keep regex literals single-quoted when possible so
+regex backslashes remain visible:
+
+```powershell
+$message = 'The state is "ready"'
+$owner = 'it''s ready'
+$startProcessPattern = '(?im)^\s*Start-Process\b[^\r\n]*\bwsl(?:\.exe)?\b'
+```
+
+Use `.Contains()` for exact syntax tokens, especially call operator forms. Reserve
+regex for patterns that actually need regex behavior:
+
+```powershell
+$hasWslCall = (
+    $text.Contains('& wsl') -or
+    $text.Contains('&''wsl') -or
+    $text.Contains('&"wsl')
+)
+```
+
+Use `[regex]::Escape($value)` before inserting a dynamic literal into a regex. Do
+not combine multiple quoting dialects in one generated command string.
 
 ## Sequencing and Errors
 
@@ -64,6 +93,24 @@ reviewable `.ps1` entry point. When PowerShell 7 is required, invoke it explicit
 pwsh -NoProfile -NonInteractive -File "C:\path\to\script.ps1"
 ```
 
+## Native Process Arguments
+
+Use the call operator with an argument array for ordinary native execution:
+
+```powershell
+$arguments = @('--sandbox', 'read-only', '--model', 'gpt-5.3-codex-spark')
+& $executable @arguments
+if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+}
+```
+
+When output redirection, lifecycle control, or exact argv construction is needed,
+use `System.Diagnostics.ProcessStartInfo.ArgumentList`. Avoid
+`Start-Process -ArgumentList` when arguments contain spaces or quotes because it
+reconstructs a command line and reintroduces quoting ambiguity. Do not put
+multi-statement logic in `pwsh -Command`; pass a reviewed `.ps1` to `-File`.
+
 ## Runtimes and Activation
 
 Use Windows runtime layouts. For a Python virtual environment:
@@ -78,7 +125,8 @@ elevate or weaken execution policy.
 
 ## Parse Before Execution
 
-For a generated non-trivial script, parse it before running:
+Parse every generated or modified non-trivial script before its first execution.
+Make this a deterministic runner or contract gate rather than a prose request:
 
 ```powershell
 $tokens = $null
@@ -95,9 +143,14 @@ if ($errors.Count -gt 0) {
 }
 ```
 
+For script text not yet stored in a file, use `Parser::ParseInput` with the same
+token and error checks. A parse failure is a mechanical correction; do not execute
+the script until parsing returns zero errors. Parsing proves syntax only, so still
+run the requested behavior and regression commands afterward.
+
 ## Final Check
 
 Confirm that the output uses one PowerShell dialect, quoted Windows-compatible
 paths, `$env:` variables, correct cmdlet/native error handling, no Bash/WSL
 assumptions, and safe literal filesystem targets. Run the parser and the requested
-verification command; return the actual exit code and evidence.
+verification command; return parser errors, actual exit codes, and evidence.

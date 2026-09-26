@@ -1,124 +1,131 @@
 ---
 name: opaid
-description: Use for local software development from a frozen task through an exact self-tested candidate and concise Human handoff, especially when multiple independent implementation, diagnosis, or test tracks can use direct sibling subagents or interrupted work must resume from verified state. Excludes remote CI/CD, release tags, deployment, and target-environment operations.
+description: Implement bounded software changes under shared project contracts, with unit tests, applicable local integration, and exact candidate evidence. Use for implementation and source fixes; route contract changes to PACT, acceptance assets and environment verification to VERIFY, and authorized delivery to CICD.
 ---
 
 # OPAID
 
-## Purpose
+## Outcome
 
-Deliver the exact final code candidate with its specified local self-tests passing
-and hand it to the Human in a concise review surface.
-Maximize useful parallel subagent work while preserving verified progress. Keep one
-Root Orchestrator as the authority for scope, scheduling, semantics, integration,
-and final verification; use direct sibling Workers for bounded execution.
+Deliver one bounded implementation within the project's current agreements.
+Verify the exact final candidate with unit and applicable local integration tests,
+including locally runnable acceptance paths, and hand off traceable evidence.
+Optimize for completed, reviewable outcomes and low coordination cost.
 
-Treat the orchestration tool as the operational source of truth. Do not create an
-Agent registry, mailbox, status ledger, governance checklist, or process document
-unless the user explicitly requests that artifact.
-
-When the repository requires one iteration brief, maintain exactly that one Human
-document. Do not turn Worker messages, command transcripts, intermediate candidate
-notes, or subcycles into additional tracked documents.
+Work directly by default. Use the existing task, repository brief, and available
+collaboration tools; do not create parallel registries, mailboxes, status ledgers,
+or governance documents. Maintain one brief only when the project or user
+requires it. These instructions apply across agents and harnesses.
 
 ## Boundary
 
-Run OPAID from task framing through locally self-tested code and its Human handoff.
-Exclude remote CI/CD, release tags, deployment, target-environment administration,
-SIT, UAT, and production operations. If the user separately requests one of those
-activities, finish OPAID first and enter the repository's release workflow as a
-separate task; do not make it an OPAID exit gate.
+OPAID owns task framing, implementation, source repairs, unit tests, applicable
+local integration, and candidate handoff. Local dependencies, containers, services,
+and browser tools needed for those checks are in scope when authorized. CICD owns
+authorized build/delivery, environment technical readiness, promotion, and rollback.
+VERIFY designs acceptance assets early and owns business verification after each
+environment delivery. OPAID may execute those scenarios locally; local test results
+do not replace a target-environment VERIFY conclusion or Human acceptance.
 
-Do not add a default review, documentation, role, or ceremony phase. Add a bounded
-analysis or read-only review task only when it directly resolves a current code or
-self-test risk.
+PACT maintains shared document contracts, including authorized design changes.
+Find effective specification, architecture, scenarios, and evidence through the
+project's AGENTS.md or existing entry. Follow those pointers and versions; do not
+assume a sibling PACT directory or installed skill. Use existing agreements;
+ordinary implementation does not require PACT initialization or a stage approval.
+If an agreement must change, apply the PACT responsibility in the same task when
+available. Use VERIFY's applicable stable scenario IDs and acceptance basis.
+Missing scenario assets go to VERIFY; missing or conflicting product/interface
+meaning goes to PACT's agreement responsibility before dependent work.
+These skill names route responsibilities, not tool-specific commands or mandatory
+extra sessions. When a skill is absent, use the project's documented equivalent
+or report the gap; do not invent its rules or pretend it was loaded.
 
-## Round Contract
+Respect existing user authorization. Ask only for an unresolved decision that
+materially changes the result or exceeds that authorization; do not ask again for
+an already authorized action.
 
-Before dispatch, establish:
+## Task Contract
 
-- one code outcome, acceptance sentence, non-goals, and exact base state;
-- the specified local self-test commands and risk-based regression commands;
-- a dependency graph of bounded tasks with allowed and excluded write paths;
-- frozen public contracts and the decisions that only the Root may change.
+Before editing, establish the finite user result, relevant scenarios, and non-goals
+from the request and repository context. State material assumptions briefly in
+the existing task or brief. Identify applicable specification and architecture
+revisions, applicable stable scenario IDs, affected modules, public contracts,
+and local test entrypoints. Do not create a new scenario for every internal helper
+or add missing process documents for a routine change. Acceptance assets describe
+expected behavior before implementation; do not derive them from whatever the
+implementation happens to do.
 
-Each Worker contract contains one task, exact base, allowed paths, required result,
-self-test commands, forbidden changes, timeout, and evidence fields. Require the
-Worker to return changed files, commands actually run, exit codes, test counts when
-available, blockers, and residual risk. Worker prose never substitutes for command
-evidence.
+Prefer existing capabilities, module interfaces, and the authoritative state
+owner. New behavior does not automatically require a new module or microservice.
+Do not bypass boundaries, add a competing source of truth, or expand scope with
+extra requirements discovered while coding; record those separately when useful.
 
-## Parallel Execution
+Changing an architectural principle, public contract, state owner, or the meaning
+of acceptance needs an explicit basis in the authorized request or a recorded
+project decision. When it is missing, pause only the dependent work, describe the
+decision and impact, and continue independent work. Approved changes update the
+authoritative agreement and VERIFY assets through their owners, then affected
+local checks; do not weaken a test to accommodate an implementation error.
 
-1. Partition work by independent outcomes and disjoint write ownership, not by
-   arbitrary file counts. Keep shared files under one owner at a time.
-2. Fill available slots immediately with the highest-value ready Worker tasks.
-   Only the Root creates Agents; keep every Worker as its direct child and prohibit
-   descendant creation.
-3. Keep the Root clean for inspection, decisions, scheduling, integration, and the
-   final self-test. Let the Root implement only when no useful Worker task can use
-   the available slot or the change cannot be safely separated.
-4. Let sibling Workers exchange facts, questions, proposals, and evidence directly.
-   A peer message cannot change scope, acceptance, a public contract, write
-   ownership, or final candidate identity; return those decisions to the Root.
-5. When a slot opens, backfill it with the highest-value ready implementation,
-   defect-fix, integration, or test task. Do not invent review work merely to keep a
-   slot busy.
-6. Let the Root integrate only completed, bounded results. Inspect the actual diff
-   and runner evidence before accepting a Worker completion statement.
+## Execution Mode
 
-Use the Root sequentially when dispatch overhead, write overlap, or unresolved
-semantics makes parallel execution slower or unsafe. Maximum useful parallelism,
-not maximum Agent count, is the objective.
+Work directly when there is one implementation track, write scopes overlap,
+semantics are unsettled, or dispatch and integration are unlikely to save work.
 
-## Forward-Only Recovery
+Use Workers only when at least two ready tracks have agreed inputs, disjoint write
+ownership, explicit completion checks, and expected savings greater than their
+coordination cost. Each Worker produces code, a bounded diagnosis, or test evidence;
+do not create generic role or ceremony Agents. When the harness lacks delegation,
+execute the same contract directly without introducing a substitute control plane.
 
-Preserve every verified result that remains compatible with the frozen contracts.
-For a bounded mechanical failure, keep the candidate and let the same Worker repair
-it within its task. On timeout, interrupt the attempt, inspect its diff and evidence,
-then reassign only the unfinished bounded remainder. On dependency or contract
-change, invalidate and rerun only affected downstream tasks.
+When Workers are justified, read
+[references/parallel-workers.md](references/parallel-workers.md). Otherwise, do
+not load that reference.
 
-Never restart the whole round because one Worker fails, discard unrelated passing
-work, overwrite another Worker's files, weaken an assertion, remove a test, or
-change acceptance to manufacture a pass. If a required semantic change exceeds the
-round contract, stop that path and ask the user for the missing decision while
-continuing independent safe work.
+## Verification and Recovery
 
-## Integration and Exit
+- Select unit, contract, and applicable local integration checks by changed rules,
+  interfaces, and dependencies. Run affected VERIFY scenarios and key browser or
+  other user-entry paths locally when feasible; do not defer locally discoverable
+  business defects until deployment. VERIFY owns the acceptance basis and
+  environment conclusion, not exclusive execution of tests. Keep most cases at
+  the cheapest meaningful layer; avoid tests that mirror implementation wording.
+- Implement and exercise the agreed real action or observation entrypoints,
+  following the project's visual requirements. Internal utilities do not each
+  need a page. Mock responses, screenshots, and successful builds alone cannot
+  prove a real business path. Include meaningful failure, persistence, and
+  authorization tests when affected. Use reproducible fixtures and independent
+  expectations for numerical or domain rules; do not copy implementation output
+  into expected results or change VERIFY's frozen tolerances to make tests pass.
+- During implementation, run focused checks when useful; each modifying Worker
+  verifies its track. After the final edit or integration, inspect workspace status
+  and diff, then run the required final local checks on that exact candidate.
+  Use the project's VCS or reproducible snapshot mechanism to identify it. An
+  existing revision plus the full change set, including new files, can identify a
+  local candidate; do not require Git or create a commit merely to manufacture an ID.
+- Write implementation and local-check facts to existing shared evidence locations,
+  linking applicable stable scenario IDs, spec revision, exact candidate, and test
+  environment. Preserve historical evidence and distinguish local tests, CICD
+  readiness, VERIFY conclusions, and Human acceptance. Commands and exit status
+  establish test facts; they cannot change scenario meaning or sign acceptance.
+  Unrun checks remain unverified, and an older candidate's pass is not a new pass.
+- Preserve compatible passing work. Repair bounded mechanical failures in place
+  and rerun affected tests. Do not restart unrelated work, overwrite user changes,
+  weaken tests or acceptance, or manufacture a pass.
 
-After all modifying Workers finish or are stopped:
+## Exit
 
-1. Establish the exact integrated candidate from the real workspace and inspect its
-   status and diff for ownership violations, conflicts, debug residue, or unrelated
-   edits.
-2. Run every specified self-test against that exact candidate. Worker-branch or
-   pre-integration passes are supporting evidence only.
-3. Route each failure to one bounded Worker when parallel repair is safe; preserve
-   passing work and rerun the affected tests plus required regression commands.
-4. Update the single repository brief, when required, with only the objective,
-   acceptance, non-goals, public-contract changes, Human decisions, actual final
-   test evidence, and residual risks.
-5. Finish only when the acceptance sentence is satisfied, every specified self-test
-   passes on the final candidate, no unresolved in-scope error remains, and the
-   concise Human handoff is ready.
+Finish local implementation when the agreed local acceptance conditions are met,
+the candidate is inspected, required local checks pass, and no in-scope error
+remains. If a required check cannot run or pass, report the blocking evidence and
+do not label the candidate verified. Pending Human acceptance remains pending;
+providing the candidate for review does not imply the Human has accepted it.
 
-Return the changed code, a concise change summary, and actual test commands and
-results through the brief or equivalent review surface. The Human may then require
-one full local validation plus manual retest on the same candidate, or accept the
-documented evidence and continue to merge or the next iteration. Neither choice
-implicitly authorizes remote CI/CD. If a specified self-test cannot pass, report
-the blocking evidence and do not label the round complete. Do not create a release
-tag, wait for remote CI/CD, or report remote CI/CD status as part of the OPAID round.
-
-## Quick Corrections
-
-| Drift | Correction |
-|---|---|
-| Root implements while ready Worker work exists | Return the Root to orchestration and fill the Worker slot |
-| A Worker creates another Agent | Stop the descendant and flatten ownership under the Root |
-| Finished slots become generic reviewers | Backfill ready code, fix, integration, or test work first |
-| One failure restarts all tracks | Preserve compatible passing results and rerun the affected subgraph |
-| Worker says tests passed without facts | Require actual command, exit-code, and inventory evidence |
-| Human must read Agent working notes | Collapse the result into the single brief or concise handoff |
-| Local work expands into CI/CD | Exit with the self-tested candidate and invoke the release workflow separately only after Human authorization |
+Return the bounded result and changed files, candidate and spec identities,
+relevant scenario IDs, actual local check commands/results, runnable verification
+entrypoints, and material limitations. Provide the inputs needed by CICD and
+VERIFY; reuse shared documents rather than creating another ledger. Handoff does
+not authorize delivery. If the full chain was already requested, continue within
+that authorization: CICD delivers and establishes technical readiness, VERIFY
+records business results for that environment, then CICD applies the promotion
+or rollback contract. Required Human judgment remains explicit.
